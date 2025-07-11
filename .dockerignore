@@ -1,0 +1,64 @@
+# Node modules and package files
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git/
+.gitignore
+
+# Documentation (include in final image if needed)
+*.md
+docs/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Test files
+test/
+*.test.*
+coverage/
+
+# Cache directories
+.npm/
+.cache/
+.parcel-cache/
+
+# Temporary folders
+tmp/
+temp/
+
+# Model cache (will be created in container)
+/tmp/moondream_models/
+/tmp/debug_images/
+
+# Example files
+examples/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
