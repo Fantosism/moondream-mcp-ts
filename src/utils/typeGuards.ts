@@ -79,7 +79,7 @@ export function isFloatInRange(value: unknown, min: number, max: number): value 
 // JSON type guards
 export function isJsonObject(value: unknown): value is Record<string, unknown> {
   if (!isObject(value)) return false;
-  
+
   try {
     JSON.parse(JSON.stringify(value));
     return true;
@@ -90,7 +90,7 @@ export function isJsonObject(value: unknown): value is Record<string, unknown> {
 
 export function isValidJson(value: unknown): value is Record<string, unknown> | unknown[] {
   if (!isString(value)) return false;
-  
+
   try {
     const parsed = JSON.parse(value);
     return isObject(parsed) || isArray(parsed);
@@ -102,7 +102,7 @@ export function isValidJson(value: unknown): value is Record<string, unknown> | 
 // URL type guards
 export function isUrl(value: unknown): value is string {
   if (!isString(value)) return false;
-  
+
   try {
     const url = new URL(value);
     return url.protocol === 'http:' || url.protocol === 'https:';
@@ -113,7 +113,7 @@ export function isUrl(value: unknown): value is string {
 
 export function isHttpUrl(value: unknown): value is string {
   if (!isString(value)) return false;
-  
+
   try {
     const url = new URL(value);
     return url.protocol === 'http:';
@@ -124,7 +124,7 @@ export function isHttpUrl(value: unknown): value is string {
 
 export function isHttpsUrl(value: unknown): value is string {
   if (!isString(value)) return false;
-  
+
   try {
     const url = new URL(value);
     return url.protocol === 'https:';
@@ -136,30 +136,30 @@ export function isHttpsUrl(value: unknown): value is string {
 // File path type guards
 export function isValidFilePath(value: unknown): value is string {
   if (!isNonEmptyString(value)) return false;
-  
+
   // Basic file path validation
   const dangerousPatterns = [
-    /\.\./,           // Directory traversal
-    /\/\.\./,         // Directory traversal with slash
-    /\.\.\\/,         // Directory traversal with backslash
-    /~\//,            // Home directory access
-    /\$\{[^}]*\}/,    // Variable expansion
-    /\$\([^)]*\)/,    // Command substitution
-    /`[^`]*`/,        // Backtick command substitution
-    /\|/,             // Pipe operator
-    /;/,              // Command separator
-    /&/,              // Background process
-    />/,              // Output redirection
-    /</,              // Input redirection
+    /\.\./, // Directory traversal
+    /\/\.\./, // Directory traversal with slash
+    /\.\.\\/, // Directory traversal with backslash
+    /~\//, // Home directory access
+    /\$\{[^}]*\}/, // Variable expansion
+    /\$\([^)]*\)/, // Command substitution
+    /`[^`]*`/, // Backtick command substitution
+    /\|/, // Pipe operator
+    /;/, // Command separator
+    /&/, // Background process
+    />/, // Output redirection
+    /</, // Input redirection
   ];
-  
+
   return !dangerousPatterns.some(pattern => pattern.test(value));
 }
 
 // Image format type guards
 export function isSupportedImageFormat(value: unknown): value is string {
   if (!isString(value)) return false;
-  
+
   const supportedFormats = ['jpeg', 'jpg', 'png', 'webp', 'bmp', 'tiff', 'tif'];
   return supportedFormats.includes(value.toLowerCase());
 }
@@ -167,7 +167,7 @@ export function isSupportedImageFormat(value: unknown): value is string {
 // Content type guards
 export function isImageContentType(value: unknown): value is string {
   if (!isString(value)) return false;
-  
+
   const imageTypes = [
     'image/jpeg',
     'image/jpg',
@@ -175,9 +175,9 @@ export function isImageContentType(value: unknown): value is string {
     'image/webp',
     'image/bmp',
     'image/tiff',
-    'image/tif'
+    'image/tif',
   ];
-  
+
   return imageTypes.includes(value.toLowerCase());
 }
 
@@ -188,38 +188,39 @@ export function isBuffer(value: unknown): value is Buffer {
 
 export function isValidImageBuffer(value: unknown): value is Buffer {
   if (!isBuffer(value)) return false;
-  
+
   // Check for common image format headers
   if (value.length < 4) return false;
-  
+
   // PNG signature
-  if (value[0] === 0x89 && value[1] === 0x50 && value[2] === 0x4E && value[3] === 0x47) {
+  if (value[0] === 0x89 && value[1] === 0x50 && value[2] === 0x4e && value[3] === 0x47) {
     return true;
   }
-  
+
   // JPEG signature
-  if (value[0] === 0xFF && value[1] === 0xD8) {
+  if (value[0] === 0xff && value[1] === 0xd8) {
     return true;
   }
-  
+
   // WebP signature
-  if (value.length >= 12 && 
-      value.slice(0, 4).toString() === 'RIFF' && 
-      value.slice(8, 12).toString() === 'WEBP') {
+  if (
+    value.length >= 12 &&
+    value.slice(0, 4).toString() === 'RIFF' &&
+    value.slice(8, 12).toString() === 'WEBP'
+  ) {
     return true;
   }
-  
+
   // BMP signature
-  if (value[0] === 0x42 && value[1] === 0x4D) {
+  if (value[0] === 0x42 && value[1] === 0x4d) {
     return true;
   }
-  
+
   // TIFF signatures
-  if ((value[0] === 0x49 && value[1] === 0x49) || 
-      (value[0] === 0x4D && value[1] === 0x4D)) {
+  if ((value[0] === 0x49 && value[1] === 0x49) || (value[0] === 0x4d && value[1] === 0x4d)) {
     return true;
   }
-  
+
   return false;
 }
 
@@ -242,7 +243,10 @@ export function assertIsBoolean(value: unknown, errorMessage?: string): asserts 
   }
 }
 
-export function assertIsObject(value: unknown, errorMessage?: string): asserts value is Record<string, unknown> {
+export function assertIsObject(
+  value: unknown,
+  errorMessage?: string
+): asserts value is Record<string, unknown> {
   if (!isObject(value)) {
     throw new Error(errorMessage || `Expected object, got ${typeof value}`);
   }
@@ -263,14 +267,28 @@ export function isQueryResult(value: unknown): value is { answer: string; confid
   return isObject(value) && 'answer' in value && isString(value.answer);
 }
 
-export function isDetectionResult(value: unknown): value is { objects: unknown[]; totalFound: number } {
-  return isObject(value) && 'objects' in value && isArray(value.objects) && 
-         'totalFound' in value && isNumber(value.totalFound);
+export function isDetectionResult(
+  value: unknown
+): value is { objects: unknown[]; totalFound: number } {
+  return (
+    isObject(value) &&
+    'objects' in value &&
+    isArray(value.objects) &&
+    'totalFound' in value &&
+    isNumber(value.totalFound)
+  );
 }
 
-export function isPointingResult(value: unknown): value is { points: unknown[]; totalFound: number } {
-  return isObject(value) && 'points' in value && isArray(value.points) && 
-         'totalFound' in value && isNumber(value.totalFound);
+export function isPointingResult(
+  value: unknown
+): value is { points: unknown[]; totalFound: number } {
+  return (
+    isObject(value) &&
+    'points' in value &&
+    isArray(value.points) &&
+    'totalFound' in value &&
+    isNumber(value.totalFound)
+  );
 }
 
 export function isAltTextResult(value: unknown): value is { altText: string; wordCount?: number } {
@@ -278,6 +296,8 @@ export function isAltTextResult(value: unknown): value is { altText: string; wor
 }
 
 // Analysis result type guard
-export function isAnalysisResult(value: unknown): value is { success: boolean; errorMessage?: string; processingTimeMs?: number } {
+export function isAnalysisResult(
+  value: unknown
+): value is { success: boolean; errorMessage?: string; processingTimeMs?: number } {
   return isObject(value) && 'success' in value && isBoolean(value.success);
 }

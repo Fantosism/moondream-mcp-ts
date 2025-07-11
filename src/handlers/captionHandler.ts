@@ -25,7 +25,7 @@ export class CaptionHandler extends Handler<CaptionRequest, CaptionResult, Moond
     const imagePath = validateImagePath(sharedData.imagePath, {
       allowedDomains: [],
       blockedDomains: [],
-      maxPathLength: 2048
+      maxPathLength: 2048,
     });
     const length = sharedData.captionLength
       ? validateCaptionLength(sharedData.captionLength)

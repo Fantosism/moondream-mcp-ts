@@ -33,7 +33,7 @@ export class ModelHealthChecker {
 
   async performHealthCheck(client: HybridModelClient): Promise<HealthCheckResult> {
     const startTime = Date.now();
-    
+
     this.logger.debug('Starting health check', {}, 'health-checker');
 
     const result: HealthCheckResult = {
@@ -63,12 +63,16 @@ export class ModelHealthChecker {
 
     this.lastHealthCheck = result;
 
-    this.logger.info('Health check completed', {
-      status: result.status,
-      responseTime: result.details.overallResponseTime,
-      localAvailable: result.details.localModel.available,
-      cloudAvailable: result.details.cloudApi.available,
-    }, 'health-checker');
+    this.logger.info(
+      'Health check completed',
+      {
+        status: result.status,
+        responseTime: result.details.overallResponseTime,
+        localAvailable: result.details.localModel.available,
+        cloudAvailable: result.details.cloudApi.available,
+      },
+      'health-checker'
+    );
 
     return result;
   }
@@ -79,33 +83,40 @@ export class ModelHealthChecker {
   ): Promise<void> {
     try {
       const startTime = Date.now();
-      
+
       // Create a small test image buffer for health check
       const testImageBuffer = this.createTestImageBuffer();
-      
+
       // Perform a simple caption operation as health check
       await client.caption(testImageBuffer, 'short');
-      
+
       const responseTime = Date.now() - startTime;
-      
+
       result.details.localModel = {
         available: true,
         responseTime,
       };
 
-      this.logger.debug('Local model health check passed', {
-        responseTime,
-      }, 'health-checker');
-
+      this.logger.debug(
+        'Local model health check passed',
+        {
+          responseTime,
+        },
+        'health-checker'
+      );
     } catch (error) {
       result.details.localModel = {
         available: false,
         error: error instanceof Error ? error.message : String(error),
       };
 
-      this.logger.warn('Local model health check failed', {
-        error: error instanceof Error ? error.message : String(error),
-      }, 'health-checker');
+      this.logger.warn(
+        'Local model health check failed',
+        {
+          error: error instanceof Error ? error.message : String(error),
+        },
+        'health-checker'
+      );
     }
   }
 
@@ -115,33 +126,40 @@ export class ModelHealthChecker {
   ): Promise<void> {
     try {
       const startTime = Date.now();
-      
+
       // Create a small test image buffer for health check
       const testImageBuffer = this.createTestImageBuffer();
-      
+
       // Perform a simple caption operation as health check
       await client.caption(testImageBuffer, 'short');
-      
+
       const responseTime = Date.now() - startTime;
-      
+
       result.details.cloudApi = {
         available: true,
         responseTime,
       };
 
-      this.logger.debug('Cloud API health check passed', {
-        responseTime,
-      }, 'health-checker');
-
+      this.logger.debug(
+        'Cloud API health check passed',
+        {
+          responseTime,
+        },
+        'health-checker'
+      );
     } catch (error) {
       result.details.cloudApi = {
         available: false,
         error: error instanceof Error ? error.message : String(error),
       };
 
-      this.logger.warn('Cloud API health check failed', {
-        error: error instanceof Error ? error.message : String(error),
-      }, 'health-checker');
+      this.logger.warn(
+        'Cloud API health check failed',
+        {
+          error: error instanceof Error ? error.message : String(error),
+        },
+        'health-checker'
+      );
     }
   }
 
@@ -151,10 +169,10 @@ export class ModelHealthChecker {
     switch (mode) {
       case 'local':
         return localModel.available ? 'healthy' : 'unhealthy';
-        
+
       case 'cloud':
         return cloudApi.available ? 'healthy' : 'unhealthy';
-        
+
       case 'hybrid':
         if (localModel.available && cloudApi.available) {
           return 'healthy';
@@ -163,30 +181,88 @@ export class ModelHealthChecker {
         } else {
           return 'unhealthy';
         }
-        
+
       default:
         return 'unhealthy';
     }
   }
 
-  private createTestImageBuffer(): { data: Buffer; format: string; width: number; height: number; channels: number } {
+  private createTestImageBuffer(): {
+    data: Buffer;
+    format: string;
+    width: number;
+    height: number;
+    channels: number;
+  } {
     // Create a minimal 1x1 pixel PNG for health checks
     // This is a valid PNG with minimal data
     const pngData = Buffer.from([
-      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, // PNG signature
-      0x00, 0x00, 0x00, 0x0D, // IHDR chunk length
-      0x49, 0x48, 0x44, 0x52, // IHDR
-      0x00, 0x00, 0x00, 0x01, // Width: 1
-      0x00, 0x00, 0x00, 0x01, // Height: 1
-      0x08, 0x06, 0x00, 0x00, 0x00, // Bit depth, color type, etc.
-      0x1F, 0x15, 0xC4, 0x89, // CRC
-      0x00, 0x00, 0x00, 0x0A, // IDAT chunk length
-      0x49, 0x44, 0x41, 0x54, // IDAT
-      0x78, 0x9C, 0x62, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, // Compressed data
-      0xE2, 0x21, 0xBC, 0x33, // CRC
-      0x00, 0x00, 0x00, 0x00, // IEND chunk length
-      0x49, 0x45, 0x4E, 0x44, // IEND
-      0xAE, 0x42, 0x60, 0x82  // CRC
+      0x89,
+      0x50,
+      0x4e,
+      0x47,
+      0x0d,
+      0x0a,
+      0x1a,
+      0x0a, // PNG signature
+      0x00,
+      0x00,
+      0x00,
+      0x0d, // IHDR chunk length
+      0x49,
+      0x48,
+      0x44,
+      0x52, // IHDR
+      0x00,
+      0x00,
+      0x00,
+      0x01, // Width: 1
+      0x00,
+      0x00,
+      0x00,
+      0x01, // Height: 1
+      0x08,
+      0x06,
+      0x00,
+      0x00,
+      0x00, // Bit depth, color type, etc.
+      0x1f,
+      0x15,
+      0xc4,
+      0x89, // CRC
+      0x00,
+      0x00,
+      0x00,
+      0x0a, // IDAT chunk length
+      0x49,
+      0x44,
+      0x41,
+      0x54, // IDAT
+      0x78,
+      0x9c,
+      0x62,
+      0x00,
+      0x00,
+      0x00,
+      0x02,
+      0x00,
+      0x01, // Compressed data
+      0xe2,
+      0x21,
+      0xbc,
+      0x33, // CRC
+      0x00,
+      0x00,
+      0x00,
+      0x00, // IEND chunk length
+      0x49,
+      0x45,
+      0x4e,
+      0x44, // IEND
+      0xae,
+      0x42,
+      0x60,
+      0x82, // CRC
     ]);
 
     return {
@@ -203,17 +279,25 @@ export class ModelHealthChecker {
       this.stopPeriodicHealthChecks();
     }
 
-    this.logger.info('Starting periodic health checks', {
-      intervalMs,
-    }, 'health-checker');
+    this.logger.info(
+      'Starting periodic health checks',
+      {
+        intervalMs,
+      },
+      'health-checker'
+    );
 
     this.healthCheckInterval = globalThis.setInterval(async () => {
       try {
         await this.performHealthCheck(client);
       } catch (error) {
-        this.logger.error('Health check failed', {
-          error: error instanceof Error ? error.message : String(error),
-        }, 'health-checker');
+        this.logger.error(
+          'Health check failed',
+          {
+            error: error instanceof Error ? error.message : String(error),
+          },
+          'health-checker'
+        );
       }
     }, intervalMs);
   }

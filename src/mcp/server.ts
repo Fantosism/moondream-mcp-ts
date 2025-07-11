@@ -51,7 +51,7 @@ export class MoondreamMCPServer {
     });
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       return this.handlers.handleToolCall(request);
     });
 
@@ -64,10 +64,10 @@ export class MoondreamMCPServer {
     });
 
     // Read resource content
-    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    this.server.setRequestHandler(ReadResourceRequestSchema, async request => {
       const { uri } = request.params;
       const config = createConfigFromEnv();
-      
+
       try {
         const content = getResourceContent(uri, config);
         return {
@@ -80,12 +80,14 @@ export class MoondreamMCPServer {
           ],
         };
       } catch (error) {
-        throw new Error(`Failed to read resource ${uri}: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(
+          `Failed to read resource ${uri}: ${error instanceof Error ? error.message : String(error)}`
+        );
       }
     });
 
     // Error handling
-    this.server.onerror = (error) => {
+    this.server.onerror = error => {
       this.logger.error('MCP Server Error', { error: error.message }, 'mcp-server');
     };
 
@@ -102,7 +104,7 @@ export class MoondreamMCPServer {
 
   async start(): Promise<void> {
     this.logger.info('Starting Moondream MCP Server...', {}, 'mcp-server');
-    
+
     try {
       // Initialize the Moondream client
       const startTime = Date.now();
@@ -113,26 +115,33 @@ export class MoondreamMCPServer {
 
       // Create transport
       const transport = new StdioServerTransport();
-      
+
       // Connect server to transport
       await this.server.connect(transport);
       this.logger.info('MCP Server started and listening on stdio', {}, 'mcp-server');
-      
     } catch (error) {
-      this.logger.error('Failed to start MCP server', { error: error instanceof Error ? error.message : String(error) }, 'mcp-server');
+      this.logger.error(
+        'Failed to start MCP server',
+        { error: error instanceof Error ? error.message : String(error) },
+        'mcp-server'
+      );
       throw error;
     }
   }
 
   async cleanup(): Promise<void> {
     this.logger.info('Cleaning up MCP Server...', {}, 'mcp-server');
-    
+
     try {
       await this.client.cleanup();
       await this.server.close();
       this.logger.info('MCP Server cleanup completed', {}, 'mcp-server');
     } catch (error) {
-      this.logger.error('Error during cleanup', { error: error instanceof Error ? error.message : String(error) }, 'mcp-server');
+      this.logger.error(
+        'Error during cleanup',
+        { error: error instanceof Error ? error.message : String(error) },
+        'mcp-server'
+      );
     }
   }
 }

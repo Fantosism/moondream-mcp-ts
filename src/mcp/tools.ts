@@ -4,7 +4,8 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 export const MOONDREAM_TOOLS: Tool[] = [
   {
     name: 'analyze_image',
-    description: 'Multi-purpose image analysis tool supporting caption, query, detect, and point operations',
+    description:
+      'Multi-purpose image analysis tool supporting caption, query, detect, and point operations',
     inputSchema: {
       type: 'object',
       properties: {
@@ -23,7 +24,8 @@ export const MOONDREAM_TOOLS: Tool[] = [
         },
         object_name: {
           type: 'string',
-          description: 'Name of object to detect or point to (required for detect/point operations)',
+          description:
+            'Name of object to detect or point to (required for detect/point operations)',
         },
         length: {
           type: 'string',
@@ -262,10 +264,10 @@ export interface BatchProcessImagesArgs {
   parameters?: Record<string, any>;
 }
 
-export type ToolCallArgs = 
-  | CaptionImageArgs 
-  | QueryImageArgs 
-  | DetectObjectsArgs 
-  | PointObjectsArgs 
-  | GenerateAltTextArgs 
+export type ToolCallArgs =
+  | CaptionImageArgs
+  | QueryImageArgs
+  | DetectObjectsArgs
+  | PointObjectsArgs
+  | GenerateAltTextArgs
   | BatchProcessImagesArgs;

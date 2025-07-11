@@ -21,7 +21,7 @@ export interface Config {
   modelLoadTimeoutSeconds: number;
   enableModelWarmup: boolean;
   modelWarmupTimeoutSeconds: number;
-  
+
   // Model execution mode
   modelMode: 'local' | 'cloud' | 'hybrid';
   apiKey?: string;
@@ -111,7 +111,7 @@ export interface ConfigOptions {
   modelLoadTimeoutSeconds?: number;
   enableModelWarmup?: boolean;
   modelWarmupTimeoutSeconds?: number;
-  
+
   // Model execution mode
   modelMode?: 'local' | 'cloud' | 'hybrid';
   apiKey?: string;
@@ -199,7 +199,7 @@ export const DEFAULT_CONFIG: Config = {
   modelLoadTimeoutSeconds: 120,
   enableModelWarmup: true,
   modelWarmupTimeoutSeconds: 30,
-  
+
   // Model execution mode
   modelMode: 'cloud',
   apiEndpoint: 'https://api.moondream.ai/v1',

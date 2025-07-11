@@ -26,7 +26,8 @@ export function cleanupImageBuffer(imageBuffer: ImageBuffer): void {
     imageBuffer.sharpInstance = undefined;
   }
   // Force garbage collection hint for large buffers
-  if (imageBuffer.data.length > 1024 * 1024) { // > 1MB
+  if (imageBuffer.data.length > 1024 * 1024) {
+    // > 1MB
     if (globalThis.gc) {
       globalThis.gc();
     }
@@ -56,18 +57,18 @@ export async function loadImage(imagePath: string, config: Config): Promise<Imag
     // Process image with Sharp
     const sharpInstance = sharp(buffer);
     const metadata = await sharpInstance.metadata();
-    
+
     // Validate image format
     const format = metadata.format?.toUpperCase() || 'UNKNOWN';
     validateImageFormat(format, config.supportedFormats);
-    
+
     // Convert to RGB and get image data
     const { data, info } = await sharpInstance
       .removeAlpha() // Remove alpha channel
       .toColorspace('srgb') // Ensure sRGB color space
       .raw()
       .toBuffer({ resolveWithObject: true });
-    
+
     const imageBuffer: ImageBuffer = {
       data,
       width: info.width,
@@ -155,7 +156,6 @@ async function loadImageFromFile(filePath: string, config: Config): Promise<Buff
   }
 }
 
-
 export function validateImageFormat(format: string, supportedFormats: string[]): void {
   if (!supportedFormats.includes(format)) {
     throw new ImageProcessingError(
@@ -164,18 +164,21 @@ export function validateImageFormat(format: string, supportedFormats: string[]):
   }
 }
 
-export async function preprocessImage(imageBuffer: ImageBuffer, config: Config): Promise<ImageBuffer> {
+export async function preprocessImage(
+  imageBuffer: ImageBuffer,
+  config: Config
+): Promise<ImageBuffer> {
   const [maxWidth, maxHeight] = config.maxImageSize;
-  
+
   // Check if resizing is needed
   if (imageBuffer.width <= maxWidth && imageBuffer.height <= maxHeight) {
     return imageBuffer;
   }
-  
+
   if (!imageBuffer.sharpInstance) {
     throw new ImageProcessingError('Sharp instance not available for preprocessing');
   }
-  
+
   try {
     // Resize image maintaining aspect ratio
     const { data, info } = await imageBuffer.sharpInstance
@@ -188,7 +191,7 @@ export async function preprocessImage(imageBuffer: ImageBuffer, config: Config):
       .toColorspace('srgb') // Ensure sRGB color space
       .raw()
       .toBuffer({ resolveWithObject: true });
-    
+
     return {
       data,
       width: info.width,

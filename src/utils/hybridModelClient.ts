@@ -25,9 +25,13 @@ export class HybridModelClient {
       return;
     }
 
-    this.logger.info('Initializing hybrid model client', {
-      modelMode: this.config.modelMode
-    }, 'hybrid-model');
+    this.logger.info(
+      'Initializing hybrid model client',
+      {
+        modelMode: this.config.modelMode,
+      },
+      'hybrid-model'
+    );
 
     try {
       switch (this.config.modelMode) {
@@ -43,10 +47,14 @@ export class HybridModelClient {
             await this.localClient.initialize();
             this.logger.info('Local model initialized successfully', {}, 'hybrid-model');
           } catch (error) {
-            this.logger.warn('Local model initialization failed, cloud fallback available', {
-              error: error instanceof Error ? error.message : String(error)
-            }, 'hybrid-model');
-            
+            this.logger.warn(
+              'Local model initialization failed, cloud fallback available',
+              {
+                error: error instanceof Error ? error.message : String(error),
+              },
+              'hybrid-model'
+            );
+
             // Initialize cloud client as fallback
             await this.cloudClient.initialize();
             this.logger.info('Cloud API initialized as fallback', {}, 'hybrid-model');
@@ -55,44 +63,57 @@ export class HybridModelClient {
       }
 
       this.isInitialized = true;
-      this.logger.info('Hybrid model client initialized successfully', {
-        modelMode: this.config.modelMode
-      }, 'hybrid-model');
+      this.logger.info(
+        'Hybrid model client initialized successfully',
+        {
+          modelMode: this.config.modelMode,
+        },
+        'hybrid-model'
+      );
 
       // Start periodic health checks if enabled
       if (this.config.enableMemoryMonitoring) {
         this.healthChecker.startPeriodicHealthChecks(this, 60000); // Every minute
       }
-
     } catch (error) {
-      this.logger.error('Failed to initialize hybrid model client', {
-        error: error instanceof Error ? error.message : String(error),
-        modelMode: this.config.modelMode
-      }, 'hybrid-model');
-      
-      throw new ModelLoadError(`Failed to initialize hybrid model client: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        'Failed to initialize hybrid model client',
+        {
+          error: error instanceof Error ? error.message : String(error),
+          modelMode: this.config.modelMode,
+        },
+        'hybrid-model'
+      );
+
+      throw new ModelLoadError(
+        `Failed to initialize hybrid model client: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
-  async caption(imageBuffer: ImageBuffer, length: 'short' | 'normal' | 'detailed'): Promise<{ caption: string; confidence: number }> {
+  async caption(
+    imageBuffer: ImageBuffer,
+    length: 'short' | 'normal' | 'detailed'
+  ): Promise<{ caption: string; confidence: number }> {
     return this.executeWithFallback(
-      async (client) => client.caption(imageBuffer, length),
+      async client => client.caption(imageBuffer, length),
       'caption',
       { length }
     );
   }
 
-  async query(imageBuffer: ImageBuffer, question: string): Promise<{ answer: string; confidence: number }> {
-    return this.executeWithFallback(
-      async (client) => client.query(imageBuffer, question),
-      'query',
-      { question }
-    );
+  async query(
+    imageBuffer: ImageBuffer,
+    question: string
+  ): Promise<{ answer: string; confidence: number }> {
+    return this.executeWithFallback(async client => client.query(imageBuffer, question), 'query', {
+      question,
+    });
   }
 
   async detect(imageBuffer: ImageBuffer, objectName: string): Promise<{ objects: any[] }> {
     return this.executeWithFallback(
-      async (client) => client.detect(imageBuffer, objectName),
+      async client => client.detect(imageBuffer, objectName),
       'detect',
       { objectName }
     );
@@ -100,7 +121,7 @@ export class HybridModelClient {
 
   async point(imageBuffer: ImageBuffer, objectName: string): Promise<{ points: any[] }> {
     return this.executeWithFallback(
-      async (client) => client.point(imageBuffer, objectName),
+      async client => client.point(imageBuffer, objectName),
       'point',
       { objectName }
     );
@@ -109,11 +130,8 @@ export class HybridModelClient {
   async cleanup(): Promise<void> {
     // Stop health checks
     this.healthChecker.stopPeriodicHealthChecks();
-    
-    await Promise.all([
-      this.localClient.cleanup(),
-      this.cloudClient.cleanup()
-    ]);
+
+    await Promise.all([this.localClient.cleanup(), this.cloudClient.cleanup()]);
     this.isInitialized = false;
     this.logger.info('Hybrid model client cleaned up', {}, 'hybrid-model');
   }
@@ -147,10 +165,14 @@ export class HybridModelClient {
     try {
       return await operation(this.localClient);
     } catch (error) {
-      this.logger.error(`Local ${operationName} failed`, {
-        error: error instanceof Error ? error.message : String(error),
-        ...context
-      }, 'hybrid-model');
+      this.logger.error(
+        `Local ${operationName} failed`,
+        {
+          error: error instanceof Error ? error.message : String(error),
+          ...context,
+        },
+        'hybrid-model'
+      );
       throw error;
     }
   }
@@ -163,10 +185,14 @@ export class HybridModelClient {
     try {
       return await operation(this.cloudClient);
     } catch (error) {
-      this.logger.error(`Cloud ${operationName} failed`, {
-        error: error instanceof Error ? error.message : String(error),
-        ...context
-      }, 'hybrid-model');
+      this.logger.error(
+        `Cloud ${operationName} failed`,
+        {
+          error: error instanceof Error ? error.message : String(error),
+          ...context,
+        },
+        'hybrid-model'
+      );
       throw error;
     }
   }
@@ -182,11 +208,15 @@ export class HybridModelClient {
         this.logger.debug(`Executing ${operationName} on local model`, context, 'hybrid-model');
         return await operation(this.localClient);
       } catch (error) {
-        this.logger.warn(`Local ${operationName} failed, falling back to cloud`, {
-          error: error instanceof Error ? error.message : String(error),
-          ...context
-        }, 'hybrid-model');
-        
+        this.logger.warn(
+          `Local ${operationName} failed, falling back to cloud`,
+          {
+            error: error instanceof Error ? error.message : String(error),
+            ...context,
+          },
+          'hybrid-model'
+        );
+
         // Fall through to cloud execution
       }
     }
@@ -197,15 +227,21 @@ export class HybridModelClient {
         this.logger.debug(`Executing ${operationName} on cloud API`, context, 'hybrid-model');
         return await operation(this.cloudClient);
       } catch (error) {
-        this.logger.error(`Cloud ${operationName} failed`, {
-          error: error instanceof Error ? error.message : String(error),
-          ...context
-        }, 'hybrid-model');
+        this.logger.error(
+          `Cloud ${operationName} failed`,
+          {
+            error: error instanceof Error ? error.message : String(error),
+            ...context,
+          },
+          'hybrid-model'
+        );
         throw error;
       }
     }
 
-    throw new InferenceError(`No available backends for ${operationName}. Local model not loaded and cloud API not connected.`);
+    throw new InferenceError(
+      `No available backends for ${operationName}. Local model not loaded and cloud API not connected.`
+    );
   }
 
   getStatus(): {
@@ -220,7 +256,7 @@ export class HybridModelClient {
       localAvailable: this.localClient.isModelLoaded(),
       cloudAvailable: this.cloudClient.isConnected(),
       initialized: this.isInitialized,
-      health: this.healthChecker.getLastHealthCheck()
+      health: this.healthChecker.getLastHealthCheck(),
     };
   }
 

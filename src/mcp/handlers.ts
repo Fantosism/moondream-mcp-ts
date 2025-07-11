@@ -1,5 +1,12 @@
 import { CallToolRequest, CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { MoondreamClient, validateQuestion, validateObjectName, validateAndParseImagePaths, createConfigFromEnv, createSecurityValidationConfig } from '@/utils';
+import {
+  MoondreamClient,
+  validateQuestion,
+  validateObjectName,
+  validateAndParseImagePaths,
+  createConfigFromEnv,
+  createSecurityValidationConfig,
+} from '@/utils';
 import { ValidationError, ERROR_CODES, createStandardError } from '@/types';
 import {
   captionImage,
@@ -64,7 +71,11 @@ export class MoondreamMCPHandlers {
       switch (args.operation) {
         case 'query':
           if (!args.question) {
-            const error = createStandardError(ERROR_CODES.MISSING_QUESTION, 'Question parameter is required for query operation', 'analyze_image');
+            const error = createStandardError(
+              ERROR_CODES.MISSING_QUESTION,
+              'Question parameter is required for query operation',
+              'analyze_image'
+            );
             return {
               content: [{ type: 'text', text: JSON.stringify(error, null, 2) }],
               isError: true,
@@ -75,7 +86,11 @@ export class MoondreamMCPHandlers {
         case 'detect':
         case 'point':
           if (!args.object_name) {
-            const error = createStandardError(ERROR_CODES.MISSING_OBJECT_NAME, 'Object name parameter is required for detect/point operations', 'analyze_image');
+            const error = createStandardError(
+              ERROR_CODES.MISSING_OBJECT_NAME,
+              'Object name parameter is required for detect/point operations',
+              'analyze_image'
+            );
             return {
               content: [{ type: 'text', text: JSON.stringify(error, null, 2) }],
               isError: true,
@@ -86,7 +101,12 @@ export class MoondreamMCPHandlers {
       }
     } catch (error) {
       if (error instanceof ValidationError) {
-        const standardError = createStandardError(error.errorCode as any, error.message, 'analyze_image', error.errorContext);
+        const standardError = createStandardError(
+          error.errorCode as any,
+          error.message,
+          'analyze_image',
+          error.errorContext
+        );
         return {
           content: [{ type: 'text', text: JSON.stringify(standardError, null, 2) }],
           isError: true,
@@ -124,11 +144,15 @@ export class MoondreamMCPHandlers {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify({
-                  success: false,
-                  error: `Unknown operation: ${args.operation}`,
-                  error_code: 'INVALID_OPERATION',
-                }, null, 2),
+                text: JSON.stringify(
+                  {
+                    success: false,
+                    error: `Unknown operation: ${args.operation}`,
+                    error_code: 'INVALID_OPERATION',
+                  },
+                  null,
+                  2
+                ),
               },
             ],
             isError: true,
@@ -139,11 +163,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: `Error executing ${args.operation} operation: ${error instanceof Error ? error.message : String(error)}`,
-              error_code: 'OPERATION_ERROR',
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: `Error executing ${args.operation} operation: ${error instanceof Error ? error.message : String(error)}`,
+                error_code: 'OPERATION_ERROR',
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -173,7 +201,11 @@ export class MoondreamMCPHandlers {
         case 'batch_process_images':
           return await this.handleBatchProcessImages(args as unknown as BatchProcessImagesArgs);
         default: {
-          const error = createStandardError(ERROR_CODES.INVALID_OPERATION, `Unknown tool: ${name}`, name);
+          const error = createStandardError(
+            ERROR_CODES.INVALID_OPERATION,
+            `Unknown tool: ${name}`,
+            name
+          );
           return {
             content: [{ type: 'text', text: JSON.stringify(error, null, 2) }],
             isError: true,
@@ -182,13 +214,22 @@ export class MoondreamMCPHandlers {
       }
     } catch (error) {
       if (error instanceof ValidationError) {
-        const standardError = createStandardError(error.errorCode as any, error.message, name, error.errorContext);
+        const standardError = createStandardError(
+          error.errorCode as any,
+          error.message,
+          name,
+          error.errorContext
+        );
         return {
           content: [{ type: 'text', text: JSON.stringify(standardError, null, 2) }],
           isError: true,
         };
       }
-      const standardError = createStandardError(ERROR_CODES.OPERATION_ERROR, `Error executing ${name}: ${error instanceof Error ? error.message : String(error)}`, name);
+      const standardError = createStandardError(
+        ERROR_CODES.OPERATION_ERROR,
+        `Error executing ${name}: ${error instanceof Error ? error.message : String(error)}`,
+        name
+      );
       return {
         content: [{ type: 'text', text: JSON.stringify(standardError, null, 2) }],
         isError: true,
@@ -209,13 +250,17 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: true,
-              caption: result.result.caption,
-              confidence: result.result.confidence,
-              length: result.result.length,
-              processingTimeMs: result.result.processingTimeMs,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: true,
+                caption: result.result.caption,
+                confidence: result.result.confidence,
+                length: result.result.length,
+                processingTimeMs: result.result.processingTimeMs,
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -224,11 +269,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: result.result?.errorMessage || 'Caption generation failed',
-              errorCode: result.result?.errorCode,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: result.result?.errorMessage || 'Caption generation failed',
+                errorCode: result.result?.errorCode,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -244,13 +293,17 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: true,
-              answer: result.result.answer,
-              question: result.result.question,
-              confidence: result.result.confidence,
-              processingTimeMs: result.result.processingTimeMs,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: true,
+                answer: result.result.answer,
+                question: result.result.question,
+                confidence: result.result.confidence,
+                processingTimeMs: result.result.processingTimeMs,
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -259,11 +312,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: result.result?.errorMessage || 'Query failed',
-              errorCode: result.result?.errorCode,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: result.result?.errorMessage || 'Query failed',
+                errorCode: result.result?.errorCode,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -279,13 +336,17 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: true,
-              objects: result.result.objects,
-              objectName: result.result.objectName,
-              totalFound: result.result.totalFound,
-              processingTimeMs: result.result.processingTimeMs,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: true,
+                objects: result.result.objects,
+                objectName: result.result.objectName,
+                totalFound: result.result.totalFound,
+                processingTimeMs: result.result.processingTimeMs,
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -294,11 +355,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: result.result?.errorMessage || 'Object detection failed',
-              errorCode: result.result?.errorCode,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: result.result?.errorMessage || 'Object detection failed',
+                errorCode: result.result?.errorCode,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -314,13 +379,17 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: true,
-              points: result.result.points,
-              objectName: result.result.objectName,
-              totalFound: result.result.totalFound,
-              processingTimeMs: result.result.processingTimeMs,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: true,
+                points: result.result.points,
+                objectName: result.result.objectName,
+                totalFound: result.result.totalFound,
+                processingTimeMs: result.result.processingTimeMs,
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -329,11 +398,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: result.result?.errorMessage || 'Object pointing failed',
-              errorCode: result.result?.errorCode,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: result.result?.errorMessage || 'Object pointing failed',
+                errorCode: result.result?.errorCode,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -360,14 +433,18 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: true,
-              altText: result.result.altText,
-              style: result.result.style,
-              wordCount: result.result.wordCount,
-              accessibility: result.result.accessibility,
-              processingTimeMs: result.result.processingTimeMs,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: true,
+                altText: result.result.altText,
+                style: result.result.style,
+                wordCount: result.result.wordCount,
+                accessibility: result.result.accessibility,
+                processingTimeMs: result.result.processingTimeMs,
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -376,11 +453,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: result.result?.errorMessage || 'Alt-text generation failed',
-              errorCode: result.result?.errorCode,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: result.result?.errorMessage || 'Alt-text generation failed',
+                errorCode: result.result?.errorCode,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,
@@ -394,14 +475,18 @@ export class MoondreamMCPHandlers {
       const imagePaths = validateAndParseImagePaths(args.image_paths, {
         allowedDomains: this.securityConfig.allowedDomains,
         blockedDomains: this.securityConfig.blockedDomains,
-        maxPathLength: this.securityConfig.maxPathLength
+        maxPathLength: this.securityConfig.maxPathLength,
       });
 
-      // Validate required parameters based on operation  
+      // Validate required parameters based on operation
       switch (args.operation) {
         case 'query':
           if (!args.question) {
-            const error = createStandardError(ERROR_CODES.MISSING_QUESTION, 'Question parameter is required for query operation', 'batch_analyze_images');
+            const error = createStandardError(
+              ERROR_CODES.MISSING_QUESTION,
+              'Question parameter is required for query operation',
+              'batch_analyze_images'
+            );
             return {
               content: [{ type: 'text', text: JSON.stringify(error, null, 2) }],
               isError: true,
@@ -412,7 +497,11 @@ export class MoondreamMCPHandlers {
         case 'detect':
         case 'point':
           if (!args.object_name) {
-            const error = createStandardError(ERROR_CODES.MISSING_OBJECT_NAME, 'Object name parameter is required for detect/point operations', 'batch_analyze_images');
+            const error = createStandardError(
+              ERROR_CODES.MISSING_OBJECT_NAME,
+              'Object name parameter is required for detect/point operations',
+              'batch_analyze_images'
+            );
             return {
               content: [{ type: 'text', text: JSON.stringify(error, null, 2) }],
               isError: true,
@@ -443,7 +532,11 @@ export class MoondreamMCPHandlers {
           result = await batchPointObjects(this.client, imagePaths, args.object_name!);
           break;
         default: {
-          const error = createStandardError(ERROR_CODES.INVALID_OPERATION, `Unknown batch operation: ${args.operation}`, 'batch_analyze_images');
+          const error = createStandardError(
+            ERROR_CODES.INVALID_OPERATION,
+            `Unknown batch operation: ${args.operation}`,
+            'batch_analyze_images'
+          );
           return {
             content: [{ type: 'text', text: JSON.stringify(error, null, 2) }],
             isError: true,
@@ -456,13 +549,17 @@ export class MoondreamMCPHandlers {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: true,
-                operation: args.operation,
-                total_processed: result.batchResults?.length || 0,
-                results: result.batchResults,
-                processing_time_ms: result.result.processingTimeMs,
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: true,
+                  operation: args.operation,
+                  total_processed: result.batchResults?.length || 0,
+                  results: result.batchResults,
+                  processing_time_ms: result.result.processingTimeMs,
+                },
+                null,
+                2
+              ),
             },
           ],
         };
@@ -471,11 +568,15 @@ export class MoondreamMCPHandlers {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: false,
-                error: result.result?.errorMessage || `Batch ${args.operation} failed`,
-                error_code: result.result?.errorCode || 'BATCH_OPERATION_ERROR',
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: result.result?.errorMessage || `Batch ${args.operation} failed`,
+                  error_code: result.result?.errorCode || 'BATCH_OPERATION_ERROR',
+                },
+                null,
+                2
+              ),
             },
           ],
           isError: true,
@@ -483,13 +584,22 @@ export class MoondreamMCPHandlers {
       }
     } catch (error) {
       if (error instanceof ValidationError) {
-        const standardError = createStandardError(error.errorCode as any, error.message, 'batch_analyze_images', error.errorContext);
+        const standardError = createStandardError(
+          error.errorCode as any,
+          error.message,
+          'batch_analyze_images',
+          error.errorContext
+        );
         return {
           content: [{ type: 'text', text: JSON.stringify(standardError, null, 2) }],
           isError: true,
         };
       }
-      const standardError = createStandardError(ERROR_CODES.BATCH_PROCESSING_ERROR, `Error in batch processing: ${error instanceof Error ? error.message : String(error)}`, 'batch_analyze_images');
+      const standardError = createStandardError(
+        ERROR_CODES.BATCH_PROCESSING_ERROR,
+        `Error in batch processing: ${error instanceof Error ? error.message : String(error)}`,
+        'batch_analyze_images'
+      );
       return {
         content: [{ type: 'text', text: JSON.stringify(standardError, null, 2) }],
         isError: true,
@@ -499,7 +609,7 @@ export class MoondreamMCPHandlers {
 
   private async handleBatchProcessImages(args: BatchProcessImagesArgs): Promise<CallToolResult> {
     let result;
-    
+
     switch (args.operation) {
       case 'caption':
         result = await batchCaptionImages(
@@ -515,10 +625,14 @@ export class MoondreamMCPHandlers {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify({
-                  success: false,
-                  error: 'Question parameter is required for query operation',
-                }, null, 2),
+                text: JSON.stringify(
+                  {
+                    success: false,
+                    error: 'Question parameter is required for query operation',
+                  },
+                  null,
+                  2
+                ),
               },
             ],
             isError: true,
@@ -532,16 +646,24 @@ export class MoondreamMCPHandlers {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify({
-                  success: false,
-                  error: 'Object name parameter is required for detect operation',
-                }, null, 2),
+                text: JSON.stringify(
+                  {
+                    success: false,
+                    error: 'Object name parameter is required for detect operation',
+                  },
+                  null,
+                  2
+                ),
               },
             ],
             isError: true,
           };
         }
-        result = await batchDetectObjects(this.client, args.image_paths, args.parameters.object_name);
+        result = await batchDetectObjects(
+          this.client,
+          args.image_paths,
+          args.parameters.object_name
+        );
         break;
       case 'point':
         if (!args.parameters?.object_name) {
@@ -549,16 +671,24 @@ export class MoondreamMCPHandlers {
             content: [
               {
                 type: 'text',
-                text: JSON.stringify({
-                  success: false,
-                  error: 'Object name parameter is required for point operation',
-                }, null, 2),
+                text: JSON.stringify(
+                  {
+                    success: false,
+                    error: 'Object name parameter is required for point operation',
+                  },
+                  null,
+                  2
+                ),
               },
             ],
             isError: true,
           };
         }
-        result = await batchPointObjects(this.client, args.image_paths, args.parameters.object_name);
+        result = await batchPointObjects(
+          this.client,
+          args.image_paths,
+          args.parameters.object_name
+        );
         break;
       case 'alt-text':
         result = await batchGenerateAltText(
@@ -579,10 +709,14 @@ export class MoondreamMCPHandlers {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: false,
-                error: `Unknown batch operation: ${args.operation}`,
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: `Unknown batch operation: ${args.operation}`,
+                },
+                null,
+                2
+              ),
             },
           ],
           isError: true,
@@ -594,13 +728,17 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: true,
-              operation: args.operation,
-              totalProcessed: result.batchResults?.length || 0,
-              results: result.batchResults,
-              processingTimeMs: result.result.processingTimeMs,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: true,
+                operation: args.operation,
+                totalProcessed: result.batchResults?.length || 0,
+                results: result.batchResults,
+                processingTimeMs: result.result.processingTimeMs,
+              },
+              null,
+              2
+            ),
           },
         ],
       };
@@ -609,11 +747,15 @@ export class MoondreamMCPHandlers {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: result.result?.errorMessage || `Batch ${args.operation} failed`,
-              errorCode: result.result?.errorCode,
-            }, null, 2),
+            text: JSON.stringify(
+              {
+                success: false,
+                error: result.result?.errorMessage || `Batch ${args.operation} failed`,
+                errorCode: result.result?.errorCode,
+              },
+              null,
+              2
+            ),
           },
         ],
         isError: true,

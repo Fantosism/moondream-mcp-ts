@@ -29,7 +29,7 @@ export class Logger {
 
   private formatLog(entry: LogEntry): string {
     const { timestamp, level, message, context, component } = entry;
-    
+
     switch (this.config.logFormat) {
       case 'json':
         return JSON.stringify(entry);
@@ -48,7 +48,12 @@ export class Logger {
     }
   }
 
-  private createLogEntry(level: LogLevel, message: string, context?: Record<string, any>, component?: string): LogEntry {
+  private createLogEntry(
+    level: LogLevel,
+    message: string,
+    context?: Record<string, any>,
+    component?: string
+  ): LogEntry {
     return {
       timestamp: new Date().toISOString(),
       level,
@@ -62,7 +67,7 @@ export class Logger {
     if (!this.shouldLog(entry.level)) return;
 
     const formatted = this.formatLog(entry);
-    
+
     // Write to console (stderr for warnings/errors, stdout for others)
     if (entry.level === 'error' || entry.level === 'warn') {
       console.error(formatted);
@@ -93,26 +98,45 @@ export class Logger {
   }
 
   // Performance logging
-  performance(operation: string, durationMs: number, context?: Record<string, any>, component?: string): void {
+  performance(
+    operation: string,
+    durationMs: number,
+    context?: Record<string, any>,
+    component?: string
+  ): void {
     if (this.config.enablePerformanceLogging) {
-      this.info(`Performance: ${operation} completed in ${durationMs}ms`, {
-        operation,
-        durationMs,
-        ...context,
-      }, component);
+      this.info(
+        `Performance: ${operation} completed in ${durationMs}ms`,
+        {
+          operation,
+          durationMs,
+          ...context,
+        },
+        component
+      );
     }
   }
 
   // Access logging
-  access(method: string, path: string, statusCode: number, durationMs: number, context?: Record<string, any>): void {
+  access(
+    method: string,
+    path: string,
+    statusCode: number,
+    durationMs: number,
+    context?: Record<string, any>
+  ): void {
     if (this.config.enableAccessLogging) {
-      this.info(`Access: ${method} ${path} ${statusCode} ${durationMs}ms`, {
-        method,
-        path,
-        statusCode,
-        durationMs,
-        ...context,
-      }, 'access');
+      this.info(
+        `Access: ${method} ${path} ${statusCode} ${durationMs}ms`,
+        {
+          method,
+          path,
+          statusCode,
+          durationMs,
+          ...context,
+        },
+        'access'
+      );
     }
   }
 }

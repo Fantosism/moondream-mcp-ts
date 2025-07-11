@@ -29,7 +29,7 @@ export class QueryHandler extends Handler<QueryRequest, QueryResult, MoondreamWo
     const imagePath = validateImagePath(sharedData.imagePath, {
       allowedDomains: [],
       blockedDomains: [],
-      maxPathLength: 2048
+      maxPathLength: 2048,
     });
     const question = validateQuestion(sharedData.question);
 

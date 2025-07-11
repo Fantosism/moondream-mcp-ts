@@ -22,9 +22,15 @@ export class ErrorHandlerPipeline extends Handler<
 
     return {
       operation: isString(errorContext.operation) ? errorContext.operation : 'unknown',
-      imagePath: isString(errorContext.imagePath) ? errorContext.imagePath : (isString(sharedData.imagePath) ? sharedData.imagePath : 'unknown'),
+      imagePath: isString(errorContext.imagePath)
+        ? errorContext.imagePath
+        : isString(sharedData.imagePath)
+          ? sharedData.imagePath
+          : 'unknown',
       errorCode: isString(errorContext.errorCode) ? errorContext.errorCode : 'UNKNOWN_ERROR',
-      errorMessage: isString(errorContext.errorMessage) ? errorContext.errorMessage : 'An unknown error occurred',
+      errorMessage: isString(errorContext.errorMessage)
+        ? errorContext.errorMessage
+        : 'An unknown error occurred',
       timestamp: new Date().toISOString(),
     };
   }

@@ -39,7 +39,11 @@ export class InferenceError extends MoondreamError {
 }
 
 export class ValidationError extends MoondreamError {
-  constructor(message: string, errorCode: string = 'VALIDATION_ERROR', errorContext: Record<string, unknown> = {}) {
+  constructor(
+    message: string,
+    errorCode: string = 'VALIDATION_ERROR',
+    errorContext: Record<string, unknown> = {}
+  ) {
     super(message, errorCode, errorContext);
     this.name = 'ValidationError';
   }
@@ -67,7 +71,7 @@ export const ERROR_CODES = {
   FILE_NOT_FOUND: 'FILE_NOT_FOUND',
   FILE_TOO_LARGE: 'FILE_TOO_LARGE',
   PERMISSION_DENIED: 'PERMISSION_DENIED',
-  
+
   // Validation errors
   VALIDATION_ERROR: 'VALIDATION_ERROR',
   MISSING_QUESTION: 'MISSING_QUESTION',
@@ -77,38 +81,38 @@ export const ERROR_CODES = {
   INVALID_OPERATION: 'INVALID_OPERATION',
   INVALID_LENGTH: 'INVALID_LENGTH',
   DANGEROUS_CHARACTERS: 'DANGEROUS_CHARACTERS',
-  
+
   // Batch processing errors
   BATCH_SIZE_EXCEEDED: 'BATCH_SIZE_EXCEEDED',
   INVALID_IMAGE_PATHS: 'INVALID_IMAGE_PATHS',
   BATCH_OPERATION_ERROR: 'BATCH_OPERATION_ERROR',
   BATCH_PROCESSING_ERROR: 'BATCH_PROCESSING_ERROR',
-  
+
   // Network and URL errors
   NETWORK_ERROR: 'NETWORK_ERROR',
   INVALID_URL: 'INVALID_URL',
   URL_TIMEOUT: 'URL_TIMEOUT',
   HTTP_ERROR: 'HTTP_ERROR',
-  
+
   // Image processing errors
   IMAGE_PROCESSING_ERROR: 'IMAGE_PROCESSING_ERROR',
   UNSUPPORTED_FORMAT: 'UNSUPPORTED_FORMAT',
   IMAGE_DECODE_ERROR: 'IMAGE_DECODE_ERROR',
   IMAGE_TOO_LARGE: 'IMAGE_TOO_LARGE',
-  
+
   // Model and inference errors
   MODEL_LOAD_ERROR: 'MODEL_LOAD_ERROR',
   MODEL_NOT_LOADED_ERROR: 'MODEL_NOT_LOADED_ERROR',
   INFERENCE_ERROR: 'INFERENCE_ERROR',
   OPERATION_ERROR: 'OPERATION_ERROR',
-  
+
   // Generic errors
   TIMEOUT_ERROR: 'TIMEOUT_ERROR',
   UNKNOWN_ERROR: 'UNKNOWN_ERROR',
   CONFIGURATION_ERROR: 'CONFIGURATION_ERROR',
 } as const;
 
-export type ErrorCode = typeof ERROR_CODES[keyof typeof ERROR_CODES];
+export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 
 // Standardized error response interface
 export interface StandardErrorResponse {

@@ -24,7 +24,7 @@ export class AltTextHandler extends Handler<AltTextRequest, AltTextResult, Moond
     const imagePath = validateImagePath(sharedData.imagePath, {
       allowedDomains: [],
       blockedDomains: [],
-      maxPathLength: 2048
+      maxPathLength: 2048,
     });
 
     return {
@@ -146,9 +146,9 @@ export class AltTextHandler extends Handler<AltTextRequest, AltTextResult, Moond
   private buildAltTextPrompt(request: AltTextRequest): string {
     const style = request.style || 'descriptive';
     const maxLength = request.maxLength || 125;
-    
+
     let basePrompt = 'Generate alt-text for this image for visually impaired users. ';
-    
+
     switch (style) {
       case 'concise':
         basePrompt += 'Keep it brief and essential. ';
@@ -181,14 +181,15 @@ export class AltTextHandler extends Handler<AltTextRequest, AltTextResult, Moond
 
     basePrompt += `Keep the description under ${maxLength} characters. `;
     basePrompt += 'Write in present tense, be objective, and avoid subjective interpretations. ';
-    basePrompt += 'Start directly with the description without phrases like "This image shows" or "The image depicts".';
+    basePrompt +=
+      'Start directly with the description without phrases like "This image shows" or "The image depicts".';
 
     return basePrompt;
   }
 
   private processAltText(rawText: string, request: AltTextRequest): string {
     let processed = rawText.trim();
-    
+
     // Remove common prefixes that screen readers don't need
     const unnecessaryPrefixes = [
       'This image shows',
@@ -224,7 +225,8 @@ export class AltTextHandler extends Handler<AltTextRequest, AltTextResult, Moond
       // Find the last complete word within the limit
       const truncated = processed.substring(0, maxLength);
       const lastSpace = truncated.lastIndexOf(' ');
-      if (lastSpace > maxLength * 0.7) { // Don't truncate too aggressively
+      if (lastSpace > maxLength * 0.7) {
+        // Don't truncate too aggressively
         processed = truncated.substring(0, lastSpace);
       } else {
         processed = truncated;

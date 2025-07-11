@@ -33,7 +33,7 @@ export class DetectionHandler extends Handler<
     const imagePath = validateImagePath(sharedData.imagePath, {
       allowedDomains: [],
       blockedDomains: [],
-      maxPathLength: 2048
+      maxPathLength: 2048,
     });
     const objectName = validateObjectName(sharedData.objectName);
 

@@ -9,12 +9,7 @@ import {
   ModelNotLoadedError,
   MoondreamError,
 } from '@/types';
-import {
-  loadImage,
-  preprocessImage,
-  withTimeout,
-  sanitizeErrorMessage,
-} from '@/utils';
+import { loadImage, preprocessImage, withTimeout, sanitizeErrorMessage } from '@/utils';
 import { HybridModelClient } from './hybridModelClient';
 import { getLogger } from './logger';
 export class MoondreamClient {
@@ -29,7 +24,11 @@ export class MoondreamClient {
 
   async initialize(): Promise<void> {
     if (this.config.mockMode) {
-      this.logger.info('Mock mode enabled - skipping real model initialization', {}, 'moondream-client');
+      this.logger.info(
+        'Mock mode enabled - skipping real model initialization',
+        {},
+        'moondream-client'
+      );
       return;
     }
     await this.hybridClient.initialize();
@@ -51,7 +50,7 @@ export class MoondreamClient {
           normal: 'A photo showing various objects',
           detailed: 'A detailed photo showing various objects with good lighting and composition',
         };
-        
+
         const processingTime = Date.now() - startTime;
         return {
           success: true,
@@ -261,7 +260,6 @@ export class MoondreamClient {
     await this.hybridClient.cleanup();
   }
 
-
   // Alt-text generation method
   async generateAltText(
     imagePath: string,
@@ -280,22 +278,22 @@ export class MoondreamClient {
 
     try {
       const startTime = Date.now();
-      
+
       // Load and preprocess image
       const imageBuffer = await loadImage(imagePath, this.config);
       const preprocessedImage = await preprocessImage(imageBuffer, this.config);
-      
+
       // Generate specialized alt-text prompt
       const prompt = this.buildAltTextPrompt(style, maxLength, options);
-      
+
       // Use query inference with the alt-text prompt
       const result = await this.hybridClient.query(preprocessedImage, prompt);
-      
+
       // Process the result to make it accessibility-friendly
       const processedAltText = this.processAltTextResult(result.answer, maxLength);
-      
+
       const processingTime = Date.now() - startTime;
-      
+
       return {
         success: true,
         altText: processedAltText,
@@ -345,7 +343,7 @@ export class MoondreamClient {
     }
   ): string {
     let basePrompt = 'Generate accessible alt-text for visually impaired users. ';
-    
+
     switch (style) {
       case 'concise':
         basePrompt += 'Keep it brief and essential. ';
@@ -385,11 +383,11 @@ export class MoondreamClient {
 
   private processAltTextResult(rawText: string, maxLength: number): string {
     let processed = rawText.trim();
-    
+
     // Remove common prefixes that screen readers don't need
     const unnecessaryPrefixes = [
       'This image shows',
-      'This image depicts', 
+      'This image depicts',
       'The image shows',
       'The image depicts',
       'In this image',

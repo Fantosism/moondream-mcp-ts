@@ -35,7 +35,7 @@ export class AnalysisHandler extends Handler<
     const imagePath = validateImagePath(sharedData.imagePath, {
       allowedDomains: [],
       blockedDomains: [],
-      maxPathLength: 2048
+      maxPathLength: 2048,
     });
     const operation = validateOperation(sharedData.operation);
 

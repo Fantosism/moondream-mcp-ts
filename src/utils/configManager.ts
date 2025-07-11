@@ -110,7 +110,8 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_IMAGE_PREPROCESSING_ENABLED) {
-    config.imagePreprocessingEnabled = process.env.MOONDREAM_IMAGE_PREPROCESSING_ENABLED.toLowerCase() === 'true';
+    config.imagePreprocessingEnabled =
+      process.env.MOONDREAM_IMAGE_PREPROCESSING_ENABLED.toLowerCase() === 'true';
   }
 
   if (process.env.MOONDREAM_IMAGE_RESIZE_QUALITY) {
@@ -128,7 +129,8 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_ENABLE_IMAGE_OPTIMIZATION) {
-    config.enableImageOptimization = process.env.MOONDREAM_ENABLE_IMAGE_OPTIMIZATION.toLowerCase() === 'true';
+    config.enableImageOptimization =
+      process.env.MOONDREAM_ENABLE_IMAGE_OPTIMIZATION.toLowerCase() === 'true';
   }
 
   // Performance settings
@@ -184,7 +186,8 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_ENABLE_MEMORY_MONITORING) {
-    config.enableMemoryMonitoring = process.env.MOONDREAM_ENABLE_MEMORY_MONITORING.toLowerCase() === 'true';
+    config.enableMemoryMonitoring =
+      process.env.MOONDREAM_ENABLE_MEMORY_MONITORING.toLowerCase() === 'true';
   }
 
   if (process.env.MOONDREAM_MEMORY_WARNING_THRESHOLD_MB) {
@@ -242,7 +245,8 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_ENABLE_SSL_VERIFICATION) {
-    config.enableSslVerification = process.env.MOONDREAM_ENABLE_SSL_VERIFICATION.toLowerCase() === 'true';
+    config.enableSslVerification =
+      process.env.MOONDREAM_ENABLE_SSL_VERIFICATION.toLowerCase() === 'true';
   }
 
   if (process.env.MOONDREAM_PROXY_URL) {
@@ -270,7 +274,8 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_ENABLE_REQUEST_VALIDATION) {
-    config.enableRequestValidation = process.env.MOONDREAM_ENABLE_REQUEST_VALIDATION.toLowerCase() === 'true';
+    config.enableRequestValidation =
+      process.env.MOONDREAM_ENABLE_REQUEST_VALIDATION.toLowerCase() === 'true';
   }
 
   if (process.env.MOONDREAM_MAX_REQUEST_SIZE_MB) {
@@ -285,11 +290,15 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_BLOCKED_DOMAINS) {
-    config.blockedDomains = process.env.MOONDREAM_BLOCKED_DOMAINS.split(',').map(domain => domain.trim());
+    config.blockedDomains = process.env.MOONDREAM_BLOCKED_DOMAINS.split(',').map(domain =>
+      domain.trim()
+    );
   }
 
   if (process.env.MOONDREAM_ALLOWED_DOMAINS) {
-    config.allowedDomains = process.env.MOONDREAM_ALLOWED_DOMAINS.split(',').map(domain => domain.trim());
+    config.allowedDomains = process.env.MOONDREAM_ALLOWED_DOMAINS.split(',').map(domain =>
+      domain.trim()
+    );
   }
 
   // Logging settings
@@ -312,11 +321,13 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_ENABLE_PERFORMANCE_LOGGING) {
-    config.enablePerformanceLogging = process.env.MOONDREAM_ENABLE_PERFORMANCE_LOGGING.toLowerCase() === 'true';
+    config.enablePerformanceLogging =
+      process.env.MOONDREAM_ENABLE_PERFORMANCE_LOGGING.toLowerCase() === 'true';
   }
 
   if (process.env.MOONDREAM_ENABLE_ACCESS_LOGGING) {
-    config.enableAccessLogging = process.env.MOONDREAM_ENABLE_ACCESS_LOGGING.toLowerCase() === 'true';
+    config.enableAccessLogging =
+      process.env.MOONDREAM_ENABLE_ACCESS_LOGGING.toLowerCase() === 'true';
   }
 
   // Cache settings
@@ -350,7 +361,8 @@ export function createConfigFromEnv(): Config {
   }
 
   if (process.env.MOONDREAM_ENABLE_RESULT_CACHING) {
-    config.enableResultCaching = process.env.MOONDREAM_ENABLE_RESULT_CACHING.toLowerCase() === 'true';
+    config.enableResultCaching =
+      process.env.MOONDREAM_ENABLE_RESULT_CACHING.toLowerCase() === 'true';
   }
 
   // Development settings
@@ -393,10 +405,13 @@ export function createConfig(options: ConfigOptions = {}): Config {
   if (options.modelRevision) config.modelRevision = options.modelRevision;
   if (options.trustRemoteCode !== undefined) config.trustRemoteCode = options.trustRemoteCode;
   if (options.modelCacheDir) config.modelCacheDir = options.modelCacheDir;
-  if (options.modelDownloadTimeoutSeconds) config.modelDownloadTimeoutSeconds = options.modelDownloadTimeoutSeconds;
-  if (options.modelLoadTimeoutSeconds) config.modelLoadTimeoutSeconds = options.modelLoadTimeoutSeconds;
+  if (options.modelDownloadTimeoutSeconds)
+    config.modelDownloadTimeoutSeconds = options.modelDownloadTimeoutSeconds;
+  if (options.modelLoadTimeoutSeconds)
+    config.modelLoadTimeoutSeconds = options.modelLoadTimeoutSeconds;
   if (options.enableModelWarmup !== undefined) config.enableModelWarmup = options.enableModelWarmup;
-  if (options.modelWarmupTimeoutSeconds) config.modelWarmupTimeoutSeconds = options.modelWarmupTimeoutSeconds;
+  if (options.modelWarmupTimeoutSeconds)
+    config.modelWarmupTimeoutSeconds = options.modelWarmupTimeoutSeconds;
 
   // Device settings
   if (options.device) {
@@ -413,10 +428,13 @@ export function createConfig(options: ConfigOptions = {}): Config {
   if (options.maxImageSize) config.maxImageSize = options.maxImageSize;
   if (options.maxFileSizeMb) config.maxFileSizeMb = options.maxFileSizeMb;
   if (options.maxImagePixels) config.maxImagePixels = options.maxImagePixels;
-  if (options.imagePreprocessingEnabled !== undefined) config.imagePreprocessingEnabled = options.imagePreprocessingEnabled;
+  if (options.imagePreprocessingEnabled !== undefined)
+    config.imagePreprocessingEnabled = options.imagePreprocessingEnabled;
   if (options.imageResizeQuality) config.imageResizeQuality = options.imageResizeQuality;
-  if (options.imageCompressionQuality) config.imageCompressionQuality = options.imageCompressionQuality;
-  if (options.enableImageOptimization !== undefined) config.enableImageOptimization = options.enableImageOptimization;
+  if (options.imageCompressionQuality)
+    config.imageCompressionQuality = options.imageCompressionQuality;
+  if (options.enableImageOptimization !== undefined)
+    config.enableImageOptimization = options.enableImageOptimization;
 
   // Performance settings
   if (options.timeoutSeconds) config.timeoutSeconds = options.timeoutSeconds;
@@ -424,11 +442,14 @@ export function createConfig(options: ConfigOptions = {}): Config {
   if (options.enableStreaming !== undefined) config.enableStreaming = options.enableStreaming;
   if (options.maxBatchSize) config.maxBatchSize = options.maxBatchSize;
   if (options.batchConcurrency) config.batchConcurrency = options.batchConcurrency;
-  if (options.enableBatchProgress !== undefined) config.enableBatchProgress = options.enableBatchProgress;
+  if (options.enableBatchProgress !== undefined)
+    config.enableBatchProgress = options.enableBatchProgress;
   if (options.batchTimeoutSeconds) config.batchTimeoutSeconds = options.batchTimeoutSeconds;
   if (options.workerThreads) config.workerThreads = options.workerThreads;
-  if (options.enableMemoryMonitoring !== undefined) config.enableMemoryMonitoring = options.enableMemoryMonitoring;
-  if (options.memoryWarningThresholdMb) config.memoryWarningThresholdMb = options.memoryWarningThresholdMb;
+  if (options.enableMemoryMonitoring !== undefined)
+    config.enableMemoryMonitoring = options.enableMemoryMonitoring;
+  if (options.memoryWarningThresholdMb)
+    config.memoryWarningThresholdMb = options.memoryWarningThresholdMb;
 
   // Network settings
   if (options.requestTimeoutSeconds) config.requestTimeoutSeconds = options.requestTimeoutSeconds;
@@ -438,17 +459,22 @@ export function createConfig(options: ConfigOptions = {}): Config {
   if (options.readTimeoutSeconds) config.readTimeoutSeconds = options.readTimeoutSeconds;
   if (options.retryAttempts) config.retryAttempts = options.retryAttempts;
   if (options.retryBackoffSeconds) config.retryBackoffSeconds = options.retryBackoffSeconds;
-  if (options.enableSslVerification !== undefined) config.enableSslVerification = options.enableSslVerification;
+  if (options.enableSslVerification !== undefined)
+    config.enableSslVerification = options.enableSslVerification;
   if (options.proxyUrl) config.proxyUrl = options.proxyUrl;
 
   // Security settings
   if (options.enableCors !== undefined) config.enableCors = options.enableCors;
   if (options.corsOrigins) config.corsOrigins = options.corsOrigins;
-  if (options.enableRateLimiting !== undefined) config.enableRateLimiting = options.enableRateLimiting;
-  if (options.rateLimitRequestsPerMinute) config.rateLimitRequestsPerMinute = options.rateLimitRequestsPerMinute;
-  if (options.enableRequestValidation !== undefined) config.enableRequestValidation = options.enableRequestValidation;
+  if (options.enableRateLimiting !== undefined)
+    config.enableRateLimiting = options.enableRateLimiting;
+  if (options.rateLimitRequestsPerMinute)
+    config.rateLimitRequestsPerMinute = options.rateLimitRequestsPerMinute;
+  if (options.enableRequestValidation !== undefined)
+    config.enableRequestValidation = options.enableRequestValidation;
   if (options.maxRequestSizeMb) config.maxRequestSizeMb = options.maxRequestSizeMb;
-  if (options.enableSanitization !== undefined) config.enableSanitization = options.enableSanitization;
+  if (options.enableSanitization !== undefined)
+    config.enableSanitization = options.enableSanitization;
   if (options.blockedDomains) config.blockedDomains = options.blockedDomains;
   if (options.allowedDomains) config.allowedDomains = options.allowedDomains;
 
@@ -456,20 +482,25 @@ export function createConfig(options: ConfigOptions = {}): Config {
   if (options.logLevel) config.logLevel = options.logLevel;
   if (options.logFormat) config.logFormat = options.logFormat;
   if (options.logFilePath) config.logFilePath = options.logFilePath;
-  if (options.enablePerformanceLogging !== undefined) config.enablePerformanceLogging = options.enablePerformanceLogging;
-  if (options.enableAccessLogging !== undefined) config.enableAccessLogging = options.enableAccessLogging;
+  if (options.enablePerformanceLogging !== undefined)
+    config.enablePerformanceLogging = options.enablePerformanceLogging;
+  if (options.enableAccessLogging !== undefined)
+    config.enableAccessLogging = options.enableAccessLogging;
 
   // Cache settings
   if (options.enableCaching !== undefined) config.enableCaching = options.enableCaching;
   if (options.cacheType) config.cacheType = options.cacheType;
   if (options.cacheTtlSeconds) config.cacheTtlSeconds = options.cacheTtlSeconds;
   if (options.cacheMaxSizeMb) config.cacheMaxSizeMb = options.cacheMaxSizeMb;
-  if (options.enableModelCaching !== undefined) config.enableModelCaching = options.enableModelCaching;
-  if (options.enableResultCaching !== undefined) config.enableResultCaching = options.enableResultCaching;
+  if (options.enableModelCaching !== undefined)
+    config.enableModelCaching = options.enableModelCaching;
+  if (options.enableResultCaching !== undefined)
+    config.enableResultCaching = options.enableResultCaching;
 
   // Development settings
   if (options.debugMode !== undefined) config.debugMode = options.debugMode;
-  if (options.enableDebugLogging !== undefined) config.enableDebugLogging = options.enableDebugLogging;
+  if (options.enableDebugLogging !== undefined)
+    config.enableDebugLogging = options.enableDebugLogging;
   if (options.saveDebugImages !== undefined) config.saveDebugImages = options.saveDebugImages;
   if (options.debugImageDir) config.debugImageDir = options.debugImageDir;
   if (options.mockMode !== undefined) config.mockMode = options.mockMode;
