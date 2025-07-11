@@ -41,7 +41,7 @@ The Moondream MCP server supports three execution modes:
 
 ```bash
 # Required software
-node >= 18.0.0
+node >= 20.0.0
 npm >= 9.0.0
 git
 ```
@@ -91,7 +91,7 @@ npm run test:coverage # Coverage report
 #### Dockerfile
 
 ```dockerfile
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -450,7 +450,7 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: lambda-handler.handler
-      Runtime: nodejs18.x
+      Runtime: nodejs20.x
       MemorySize: 1024
       Timeout: 30
       Environment:

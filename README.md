@@ -47,7 +47,7 @@ A production-ready Model Context Protocol (MCP) server for the Moondream vision 
 ## 📦 Quick Start
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 20+
 - npm or yarn
 - (Optional) Docker for containerized deployment
 
@@ -460,7 +460,7 @@ console.log('Cloud API:', health.details.cloudApi.available);
 ### Docker Deployment
 
 ```dockerfile
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 COPY package*.json ./
@@ -568,7 +568,7 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guides.
 
 ## 📋 Requirements
 
-- Node.js 18 or higher
+- Node.js 20 or higher
 - npm 8 or higher
 - 4GB RAM minimum (8GB recommended for local mode)
 - TypeScript 5.0 or higher

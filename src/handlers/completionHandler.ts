@@ -30,11 +30,7 @@ export class CompletionHandler extends Handler<
     };
   }
 
-  protected processResults(
-    sharedData: MoondreamWorkflowData,
-    inputs: CompletionRequest,
-    outputs: CompletionResult
-  ): string {
+  protected processResults(sharedData: MoondreamWorkflowData): string {
     // Set final processing time
     if (!sharedData.processingEndTime) {
       sharedData.processingEndTime = new Date();
