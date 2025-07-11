@@ -14,7 +14,7 @@ RUN npm ci && npm cache clean --force
 COPY src/ ./src/
 
 # Build the application
-RUN npm run build
+RUN npx tsc && npx tsc-alias
 
 # Production stage
 FROM node:20-alpine AS production
