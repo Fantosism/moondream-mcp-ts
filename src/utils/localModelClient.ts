@@ -522,18 +522,25 @@ export class LocalModelClient {
   }
 
   private cleanGeneratedText(generated: string, prompt: string): string {
-    // Remove the prompt from the generated text
     let cleaned = generated;
-    if (cleaned.toLowerCase().startsWith(prompt.toLowerCase())) {
-      cleaned = cleaned.substring(prompt.length);
-    }
-
-    // Remove common prefixes
-    const prefixes = ['Answer:', 'Response:', 'Output:', 'Result:', 'Caption:', 'Description:'];
-    for (const prefix of prefixes) {
-      if (cleaned.toLowerCase().startsWith(prefix.toLowerCase())) {
-        cleaned = cleaned.substring(prefix.length);
-        break;
+    
+    // Look for "Answer:" in the generated text and extract everything after it
+    const answerMatch = cleaned.match(/Answer:\s*(.*)/s);
+    if (answerMatch && answerMatch[1]) {
+      cleaned = answerMatch[1];
+    } else {
+      // Fallback: try to remove the prompt from the start
+      if (cleaned.toLowerCase().startsWith(prompt.toLowerCase())) {
+        cleaned = cleaned.substring(prompt.length);
+      }
+      
+      // Remove other common prefixes
+      const prefixes = ['Response:', 'Output:', 'Result:', 'Caption:', 'Description:'];
+      for (const prefix of prefixes) {
+        if (cleaned.toLowerCase().startsWith(prefix.toLowerCase())) {
+          cleaned = cleaned.substring(prefix.length);
+          break;
+        }
       }
     }
 
@@ -751,7 +758,7 @@ export class LocalModelClient {
 
   private getGenerationParams(length: 'short' | 'normal' | 'detailed'): any {
     const baseParams = {
-      do_sample: true,
+      do_sample: false,
       temperature: 0.7,
       top_p: 0.95,
       top_k: 50,

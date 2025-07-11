@@ -36,7 +36,7 @@ async function altTextGenerationExample() {
 
     // Example image URLs
     const imageUrls = [
-      'https://picsum.photos/400/300?random=1',
+      '404.jpg',
       'https://picsum.photos/400/300?random=2',
     ];
 

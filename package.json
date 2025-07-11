@@ -47,9 +47,9 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.0.0",
+    "@huggingface/transformers": "3.0.0",
     "@modelcontextprotocol/sdk": "^0.5.0",
-    "boba-t": "^1.0.0",
+    "boba-t": "^1.0.1",
     "dotenv": "^17.2.0",
     "sharp": "^0.33.5"
   },
