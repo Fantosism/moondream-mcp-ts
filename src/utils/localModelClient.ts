@@ -523,7 +523,7 @@ export class LocalModelClient {
 
   private cleanGeneratedText(generated: string, prompt: string): string {
     let cleaned = generated;
-    
+
     // Look for "Answer:" in the generated text and extract everything after it
     const answerMatch = cleaned.match(/Answer:\s*(.*)/s);
     if (answerMatch && answerMatch[1]) {
@@ -533,7 +533,7 @@ export class LocalModelClient {
       if (cleaned.toLowerCase().startsWith(prompt.toLowerCase())) {
         cleaned = cleaned.substring(prompt.length);
       }
-      
+
       // Remove other common prefixes
       const prefixes = ['Response:', 'Output:', 'Result:', 'Caption:', 'Description:'];
       for (const prefix of prefixes) {
